@@ -1,2 +1,2 @@
-# hackathon
+# Hackathon
 Hackathon week project
