@@ -6,4 +6,4 @@ Hackathon week project powered by:
   <li>Leonardo Grandolfo</li>
   <li>Francesco Carenvali</li>
 </ul><br/>
-This project consis on extract the most frequently words of an article online.
+This project consist on extract the most frequently words of an article online.
