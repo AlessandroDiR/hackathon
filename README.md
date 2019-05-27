@@ -4,5 +4,5 @@ Hackathon week project powered by:
   <li>Alessandro Di Roma</li>
   <li>Enore Lasi</li>
   <li>Leonardo Grandolfo</li>
-  <liFrancesco Carenvali</li>
+  <li>Francesco Carenvali</li>
 </ul>
