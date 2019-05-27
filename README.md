@@ -1,4 +1,4 @@
-# Cerco parole
+# Cerca parole
 Hackathon week project powered by:  
 <ul>
   <li>Alessandro Di Roma</li>
