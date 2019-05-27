@@ -1,6 +1,5 @@
 # Hackathon
-Hackathon week project  
-Powered by:  
+Hackathon week project powered by:  
   -Alessandro Di Roma  
   -Enore Lasi  
   -Leonardo Grandolfo  
