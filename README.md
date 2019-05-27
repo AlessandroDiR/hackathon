@@ -6,4 +6,5 @@ Hackathon week project powered by:
   <li>Leonardo Grandolfo</li>
   <li>Francesco Carenvali</li>
 </ul><br/>
-This project consist on extract the most frequently words of an article passed by user.
+This project consists of extracting the most frequent words of an article passed by user
+The program takes the 20 words that appeared most frequently
