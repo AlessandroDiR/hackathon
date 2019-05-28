@@ -83,7 +83,7 @@ function findwords($str){
     echo $returnstring;
 }
 
-function searchsByTag($tag, $page){
+function searchByTag($tag, $page){
     // PRENDO IL CONTENUTO DEL DOCUMENTO TRAMITE L'URL CHE MI VIENE DATO
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
