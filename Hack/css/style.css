@@ -6,10 +6,6 @@ textarea.form-control {
     resize: none;
 }
 
-.text-container {
-    position: relative;
-}
-
 header {
     height: 200px;
     background: url("header.jpg") no-repeat center;
