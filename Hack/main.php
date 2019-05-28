@@ -13,7 +13,7 @@ function sanitize($str){
     $replace = array_map("trim", explode(" ", $content));
     
     // SOSTITUISCO TUTTI I SEGNI DI PUNTEGGIATURA E I CARATTERI SPECIALI CON UNO SPAZIO NELLA STRINGA DATA
-    $str = preg_replace("/[.,\/#!$%\^&\*';\":{}=\-_`~()]/", ' ', $str);
+    $str = preg_replace("/[.,\/#!$%\“”^&\*';\":{}=\-_`~()]/", ' ', $str);
 
     // SEPARO TUTTE LE PAROLE DEL TESTO DATO CON UNO SPAZIO CREANDO UN ARRAY
     $words = explode(" ", strtolower($str));
@@ -70,6 +70,8 @@ function findwords($str){
     $returnstring .= '<td>Percentuale</td>';
     $returnstring .= '</tr></thead><tbody>';
 
+    $cloud_words = array();
+
     foreach($occurrences as $k=>$v){
         // PERCENTUALE DELLE OCCORRENZE DELLA PAROLA
         $perc = number_format((100 * $v) / $tot, 2)."%";
@@ -79,9 +81,16 @@ function findwords($str){
         $returnstring .= '<td width="30%">'.$v.'</td>';
         $returnstring .= '<td width="20%">'.$perc.'</td>';
         $returnstring .= '</tr>';
+
+        for($i = 0; $i < $v; $i++)
+            $cloud_words[] = $k;
     }
 
     $returnstring .= '</tbody></table>';
+
+    $cloud_words = implode(";", $cloud_words);
+
+    $returnstring .= '<iframe width="100%" height="500" class="border-0 mt-5" src="getcloud.php?max='.MAX_RESULTS.'&words='.$cloud_words.'"></iframe>';
 
     echo $returnstring;
 }

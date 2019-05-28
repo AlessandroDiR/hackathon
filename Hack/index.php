@@ -1,6 +1,7 @@
 <?php
 
 include("main.php");
+
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +22,7 @@ include("main.php");
             <form method="post">
                 <h1 class="display-4 mb-3 text-center">Trova parole frequenti</h1>
 
-                <div class="form-group position-relative">
+                <div class="form-group">
                     <label class="text-muted h4">Scrivi il tuo url qui:</label>
                     <input type="text" class="form-control" name="text">
                 </div>
@@ -43,6 +44,5 @@ include("main.php");
         </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
     </body>
 </html>
