@@ -1,7 +1,7 @@
 <?php
 
 // FILE NEL QUALE SI TROVANO LE PAROLE DA SCARTARE
-define("WORDSFILE", "stopwords_it.txt");
+define("WORDSFILE", "files/stopwords_it.txt");
 
 function sanitize($str){
     $content = read();
@@ -57,19 +57,33 @@ function findwords($str){
     // PRENDO SOLO LE PRIME 20 PAROLE CON LA MAGGIOR FREQUENZA
     $occurrences = array_slice($occurrences, 0, 20);
 
-    $returnstring = "Le parole che appaiono di più sono: <b>";
+    // COSTRUISCO UNA TABELLA PER VISUALIZZARE I RISULTATI
+    $returnstring = '<h5 class="text-uppercase font-weight-bold text-center">Le parole che appaiono di più sono:</h5>';
+    $returnstring .= '<table class="table table-striped table-bordered mt-2 mb-0">';
+    $returnstring .= '<thead>';
+    $returnstring .= '<tr>';
+    $returnstring .= '<td>Parola</td>';
+    $returnstring .= '<td>Occorrenze</td>';
+    $returnstring .= '<td>Percentuale</td>';
+    $returnstring .= '</tr></thead><tbody>';
 
     foreach($occurrences as $k=>$v){
-        $returnstring .= $k." (".$v." volte), ";
-
         // PERCENTUALE DELLE OCCORRENZE DELLA PAROLA
-        $perc = (100 * $v) / $tot;
+        $perc = number_format((100 * $v) / $tot, 2)."%";
+        
+        $returnstring .= '<tr>';
+        $returnstring .= '<td width="50%">'.$k.'</td>';
+        $returnstring .= '<td width="30%">'.$v.'</td>';
+        $returnstring .= '<td width="20%">'.$perc.'</td>';
+        $returnstring .= '</tr>';
     }
 
-    echo substr($returnstring, 0, -2)."</b>.";
+    $returnstring .= '</tbody></table>';
+
+    echo $returnstring;
 }
 
-function searchByTag($tag, $page){
+function searchsByTag($tag, $page){
     // PRENDO IL CONTENUTO DEL DOCUMENTO TRAMITE L'URL CHE MI VIENE DATO
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
