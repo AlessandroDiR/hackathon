@@ -3,6 +3,9 @@
 // FILE NEL QUALE SI TROVANO LE PAROLE DA SCARTARE
 define("WORDSFILE", "files/stopwords_it.txt");
 
+// MASSIMO DI PAROLE DA MOSTRARE
+define("MAX_RESULTS", 20);
+
 function sanitize($str){
     $content = read();
 
@@ -19,7 +22,7 @@ function sanitize($str){
 
     // SE L'ARRAY PRECEDENTEMENTE CREATO CONTIENE UNA DELLE PAROLE DA SCARTARE, TOLGO QUELLE PAROLE DALL'ARRAY
     foreach($words as $k=>$v){
-        if(in_array($v, $replace) || strlen($v) == 1 || is_numeric($v)){
+        if(in_array($v, $replace) || strlen($v) == 1 || is_numeric($v) || ctype_space($v)){
             unset($return[$k]);
         }
     }
@@ -55,7 +58,7 @@ function findwords($str){
     arsort($occurrences);
 
     // PRENDO SOLO LE PRIME 20 PAROLE CON LA MAGGIOR FREQUENZA
-    $occurrences = array_slice($occurrences, 0, 20);
+    $occurrences = array_slice($occurrences, 0, MAX_RESULTS);
 
     // COSTRUISCO UNA TABELLA PER VISUALIZZARE I RISULTATI
     $returnstring = '<h5 class="text-uppercase font-weight-bold text-center">Le parole che appaiono di più sono:</h5>';
@@ -88,14 +91,7 @@ function searchByTag($tag, $page){
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
 
-    $arrContextOptions=array(
-        "ssl"=>array(
-            "verify_peer"=>false,
-            "verify_peer_name"=>false,
-        ),
-    );
-
-    $html = file_get_contents($page, false, stream_context_create($arrContextOptions));
+    $html = file_get_contents($page);
 
     // CARICO L'HTML PROVENIENTE DALL'URL
     $dom->loadHTML($html);

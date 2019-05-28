@@ -6,9 +6,13 @@ textarea.form-control {
     resize: none;
 }
 
+.text-container {
+    position: relative;
+}
+
 header {
     height: 200px;
-    background: url("header.jpg") no-repeat center;
-    border-bottom: 2px solid #eee;
-    background-size: contain;
+    background: url('white.png') no-repeat center, url('header.jpg') center no-repeat;
+    border-bottom: 5px solid #bbb;
+    background-size: contain, cover;
 }
