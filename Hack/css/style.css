@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
 
-body{ font-family: Quicksand }
+body{ font-family: Quicksand; overflow-x:hidden }
 
 textarea.form-control {
     resize: none;
@@ -12,12 +12,31 @@ header {
     border-bottom: 5px solid #bbb;
     background-size: contain, cover;
 }
-#myChart {
-	height:100%;
-	width:100%;
-	min-height:150px;
+
+.pointer{ cursor:pointer }
+
+.footer-copyright{
+    background:#70bdff
 }
-.zc-ref {
-	display:none;
+
+#collapse{
+    background: var(--light);
+    text-align:center;
+    max-height:400px;
+    overflow:auto;
+    box-shadow:0 0 5px 2px rgba(0,0,0,0.2);
+    left:50px
 }
-zing-grid[loading]{height:800px;}
+
+a.history-link{
+    color:var(--info) !important;
+}
+
+a.history-link:hover{
+    text-decoration: underline;
+}
+
+i{
+    color:var(--info);
+    cursor:pointer;
+}

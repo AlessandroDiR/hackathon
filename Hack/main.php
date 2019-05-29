@@ -1,10 +1,9 @@
 <?php
 
-// FILE NEL QUALE SI TROVANO LE PAROLE DA SCARTARE
-define("WORDSFILE", "files/stopwords_it.txt");
-
 // MASSIMO DI PAROLE DA MOSTRARE
 define("MAX_RESULTS", 20);
+
+header("Content-Type: text/html; charset=utf-8");
 
 function sanitize($str){
     $content = read();
@@ -13,7 +12,7 @@ function sanitize($str){
     $replace = array_map("trim", explode(" ", $content));
     
     // SOSTITUISCO TUTTI I SEGNI DI PUNTEGGIATURA E I CARATTERI SPECIALI CON UNO SPAZIO NELLA STRINGA DATA
-    $str = preg_replace("/[.,\/#!$%\“”^&\*';\":{}=\-_`~()]/", ' ', $str);
+    $str = preg_replace("/[.,\/#!$%\“”’^&\*';\":{}=\-_`~()]/", ' ', $str);
 
     // SEPARO TUTTE LE PAROLE DEL TESTO DATO CON UNO SPAZIO CREANDO UN ARRAY
     $words = explode(" ", strtolower($str));
@@ -26,16 +25,16 @@ function sanitize($str){
             unset($return[$k]);
         }
     }
-
+    
     return array_filter($return);
 }
 
 function read(){
     // RESTITUISCO IL CONTENUTO DEL FILE
-    return file_get_contents(WORDSFILE);
+    return file_get_contents("files/stopwords_".$_POST['lang'].".txt");
 }
 
-function findwords($str){
+function findwords($str, $url){
     $occurrences = array();
 
     // PRENDO LE PAROLE "VALIDE" DALL'INPUT DELL'UTENTE
@@ -61,16 +60,35 @@ function findwords($str){
     $occurrences = array_slice($occurrences, 0, MAX_RESULTS);
 
     // COSTRUISCO UNA TABELLA PER VISUALIZZARE I RISULTATI
-    $returnstring = '<h5 class="text-uppercase font-weight-bold text-center">Le parole che appaiono di più sono:</h5>';
+    $returnstring = '<h5 class="text-uppercase font-weight-bold text-center">Le '.MAX_RESULTS.' parole che appaiono di più sono:</h5>';
+
+    $returnstring .= '<ul class="nav nav-tabs border-bottom-0 ml-5 mt-5" role="tablist">';
+    $returnstring .= '<li class="nav-item">';
+    $returnstring .= '<a class="nav-link active" data-toggle="tab" href="#results" role="tab">Risultati</a>';
+    $returnstring .= '</li>';
+    $returnstring .= '<li class="nav-item">';
+    $returnstring .= '<a class="nav-link" data-toggle="tab" href="#cloud" role="tab">Nuvoletta</a>';
+    $returnstring .= '</li>';
+    $returnstring .= '<li class="nav-item">';
+    $returnstring .= '<a class="nav-link" data-toggle="tab" href="#page" role="tab">Nella pagina</a>';
+    $returnstring .= '</li></ul>';
+    $returnstring .= '<div class="tab-content border p-3 rounded">';
+
+    $returnstring .= '<div class="tab-pane fade show active" id="results" role="tabpanel">';
     $returnstring .= '<table class="table table-striped table-bordered mt-2 mb-0">';
-    $returnstring .= '<thead>';
+    $returnstring .= '<thead class="font-weight-bold"">';
     $returnstring .= '<tr>';
     $returnstring .= '<td>Parola</td>';
     $returnstring .= '<td>Occorrenze</td>';
-    $returnstring .= '<td>Percentuale</td>';
+    $returnstring .= '<td>Percentuale (sul totale)</td>';
     $returnstring .= '</tr></thead><tbody>';
 
+    // PAROLE PER LA WORD CLOUD
     $cloud_words = array();
+
+    $title = "<h4>".searchBytag("title", $url)."</h4>";
+    
+    $body = searchByTag("p", $url);
 
     foreach($occurrences as $k=>$v){
         // PERCENTUALE DELLE OCCORRENZE DELLA PAROLA
@@ -81,18 +99,32 @@ function findwords($str){
         $returnstring .= '<td width="30%">'.$v.'</td>';
         $returnstring .= '<td width="20%">'.$perc.'</td>';
         $returnstring .= '</tr>';
+        
+        $title = preg_replace("/\b".$k."\b/", "<strong>".$k."</strong>", strtolower($title));
+        // $title = str_replace($k, "<strong>".$k."</strong>", strtolower($title));
+        $body = preg_replace("/\b".$k."\b/", "<strong>".$k."</strong>", strtolower($body));
+        // $body = str_replace($k, "<strong>".$k."</strong>", strtolower($body));
 
+        // CICLO LE PAROLE PER INSERIRLE NELLA STRINGA DELLA WORD CLOUD
         for($i = 0; $i < $v; $i++)
             $cloud_words[] = $k;
     }
 
-    $returnstring .= '</tbody></table>';
+    $returnstring .= '</tbody></table></div>';
 
     $cloud_words = implode(";", $cloud_words);
 
+    $returnstring .= '<div class="tab-pane fade" id="cloud" role="tabpanel">';
     $returnstring .= '<iframe width="100%" height="500" class="border-0 mt-5" src="getcloud.php?max='.MAX_RESULTS.'&words='.$cloud_words.'"></iframe>';
+    $returnstring .= '</div>';
+    
+    $returnstring .= '<div class="tab-pane fade" id="page" role="tabpanel">';
+    $returnstring .= $title.$body;
+    $returnstring .= '</div></div>';
 
-    echo $returnstring;
+    insertData($url, $occurrences, $body, $title);
+
+    return $returnstring;
 }
 
 function searchByTag($tag, $page){
@@ -109,7 +141,7 @@ function searchByTag($tag, $page){
     $books = $dom->getElementsByTagName($tag);
     
     // LA LUNGHEZZA DELL'OGGETTO CHE VIENE CREATO
-    $count = $books->length;
+    $count = $tag == "title" ? 1 : $books->length;
 
     $testo = "";
 
@@ -118,4 +150,51 @@ function searchByTag($tag, $page){
         $testo .= $books->item($i)->nodeValue;
 
     return $testo;
+}
+
+function getPageContent($url){
+    $content = searchByTag("title", $url)." ";
+    $content .= searchByTag("p", $url);
+
+    return $content;
+}
+
+function connectToDatabase(){
+    return mysqli_connect("localhost:3308","root","password","find");
+}
+
+function insertData($url, $results, $text, $title){
+    $conn = connectToDatabase();
+
+    $res = "";
+
+    foreach($results as $k=>$v)
+        $res .= $k." (".$v." volte) ";
+   
+    $conn->query("INSERT INTO ricerca (url, risultati, testo, titolo) VALUES ('".$url."','".$res."','".addslashes($text)."','".addslashes($title)."'); ") or die(mysqli_error($conn));
+}
+
+function getDataFromDB(){
+    $conn = connectToDatabase();
+
+    $history = $conn->query("SELECT data, id FROM ricerca ORDER BY data DESC");
+
+    $div = "";
+
+    while($h = $history->fetch_assoc()){
+        $div .= '<a href="#page-content" class="d-block p-2 border-bottom pointer nav-link small"><span id="'.$h['id'].'">'.$h['data'].'</span></a>';
+    }
+
+    return $div;
+}
+
+function getContent($id){
+    $conn = connectToDatabase();
+
+    $content = $conn->query("SELECT testo, risultati FROM ricerca WHERE id = '".$id."' LIMIT 1")->fetch_assoc();
+
+    $return = '<p>'.htmlspecialchars_decode($content['testo']).'</p>';
+    $return .= '<p>'.htmlspecialchars_decode($content['risultati']).'</p>';
+
+    return $return;
 }
