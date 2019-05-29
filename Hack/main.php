@@ -3,8 +3,6 @@
 // MASSIMO DI PAROLE DA MOSTRARE
 define("MAX_RESULTS", 20);
 
-header("Content-Type: text/html; charset=utf-8");
-
 function sanitize($str){
     $content = read();
 
@@ -192,8 +190,8 @@ function getContent($id){
     $conn = connectToDatabase();
 
     $content = $conn->query("SELECT testo, risultati FROM ricerca WHERE id = '".$id."' LIMIT 1")->fetch_assoc();
-
-    $return = '<p>'.htmlspecialchars_decode($content['testo']).'</p>';
+    
+    $return = '<p>'.$content['testo'].'</p>';
     $return .= '<p>'.htmlspecialchars_decode($content['risultati']).'</p>';
 
     return $return;
