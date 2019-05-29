@@ -1,7 +1,10 @@
 <?php
 
 // FILE NEL QUALE SI TROVANO LE PAROLE DA SCARTARE
-define("WORDSFILE", "stopwords_it.txt");
+define("WORDSFILE", "files/stopwords_it.txt");
+
+// MASSIMO DI PAROLE DA MOSTRARE
+define("MAX_RESULTS", 20);
 
 function sanitize($str){
     $content = read();
@@ -10,7 +13,7 @@ function sanitize($str){
     $replace = array_map("trim", explode(" ", $content));
     
     // SOSTITUISCO TUTTI I SEGNI DI PUNTEGGIATURA E I CARATTERI SPECIALI CON UNO SPAZIO NELLA STRINGA DATA
-    $str = preg_replace("/[.,\/#!$%\^&\*';\":{}=\-_`~()]/", ' ', $str);
+    $str = preg_replace("/[.,\/#!$%\“”^&\*';\":{}=\-_`~()]/", ' ', $str);
 
     // SEPARO TUTTE LE PAROLE DEL TESTO DATO CON UNO SPAZIO CREANDO UN ARRAY
     $words = explode(" ", strtolower($str));
@@ -19,7 +22,7 @@ function sanitize($str){
 
     // SE L'ARRAY PRECEDENTEMENTE CREATO CONTIENE UNA DELLE PAROLE DA SCARTARE, TOLGO QUELLE PAROLE DALL'ARRAY
     foreach($words as $k=>$v){
-        if(in_array($v, $replace) || strlen($v) == 1 || is_numeric($v)){
+        if(in_array($v, $replace) || strlen($v) == 1 || is_numeric($v) || ctype_space($v)){
             unset($return[$k]);
         }
     }
@@ -55,18 +58,41 @@ function findwords($str){
     arsort($occurrences);
 
     // PRENDO SOLO LE PRIME 20 PAROLE CON LA MAGGIOR FREQUENZA
-    $occurrences = array_slice($occurrences, 0, 20);
+    $occurrences = array_slice($occurrences, 0, MAX_RESULTS);
 
-    $returnstring = "Le parole che appaiono di più sono: <b>";
+    // COSTRUISCO UNA TABELLA PER VISUALIZZARE I RISULTATI
+    $returnstring = '<h5 class="text-uppercase font-weight-bold text-center">Le parole che appaiono di più sono:</h5>';
+    $returnstring .= '<table class="table table-striped table-bordered mt-2 mb-0">';
+    $returnstring .= '<thead>';
+    $returnstring .= '<tr>';
+    $returnstring .= '<td>Parola</td>';
+    $returnstring .= '<td>Occorrenze</td>';
+    $returnstring .= '<td>Percentuale</td>';
+    $returnstring .= '</tr></thead><tbody>';
+
+    $cloud_words = array();
 
     foreach($occurrences as $k=>$v){
-        $returnstring .= $k." (".$v." volte), ";
-
         // PERCENTUALE DELLE OCCORRENZE DELLA PAROLA
-        $perc = (100 * $v) / $tot;
+        $perc = number_format((100 * $v) / $tot, 2)."%";
+        
+        $returnstring .= '<tr>';
+        $returnstring .= '<td width="50%">'.$k.'</td>';
+        $returnstring .= '<td width="30%">'.$v.'</td>';
+        $returnstring .= '<td width="20%">'.$perc.'</td>';
+        $returnstring .= '</tr>';
+
+        for($i = 0; $i < $v; $i++)
+            $cloud_words[] = $k;
     }
 
-    echo substr($returnstring, 0, -2)."</b>.";
+    $returnstring .= '</tbody></table>';
+
+    $cloud_words = implode(";", $cloud_words);
+
+    $returnstring .= '<iframe width="100%" height="500" class="border-0 mt-5" src="getcloud.php?max='.MAX_RESULTS.'&words='.$cloud_words.'"></iframe>';
+
+    echo $returnstring;
 }
 
 function searchByTag($tag, $page){
@@ -74,14 +100,7 @@ function searchByTag($tag, $page){
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
 
-    $arrContextOptions=array(
-        "ssl"=>array(
-            "verify_peer"=>false,
-            "verify_peer_name"=>false,
-        ),
-    );
-
-    $html = file_get_contents($page, false, stream_context_create($arrContextOptions));
+    $html = file_get_contents($page);
 
     // CARICO L'HTML PROVENIENTE DALL'URL
     $dom->loadHTML($html);
