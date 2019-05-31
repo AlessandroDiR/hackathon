@@ -20,11 +20,11 @@ include("main.php");
         <header class="hidden-sm hidden-xs shadow-sm"></header>
 
         <div class="position-relative">
-			<div class="bars" data-toggle="collapse" data-target="#collapse">
+			<div class="bars" data-toggle="collapse" tooltip="true" title="Salvataggi precedenti" data-placement="top" data-target="#collapse">
 				<div class="bar"></div>
 			</div>
 
-            <div class="collapse rounded ml-3 col-8 col-md-2 p-0 mt-4 position-absolute" id="collapse">
+            <div class="collapse rounded ml-3 col-8 col-md-2 p-0 mt-4 position-absolute text-center" id="collapse">
                 <nav class="nav flex-column">
                     <?php echo getDataFromDB(); ?>
                 </nav>
@@ -37,7 +37,7 @@ include("main.php");
 
                 <div class="form-group">
                     <label class="text-muted h4">Scrivi il tuo url qui:</label>
-                    <input type="text" class="form-control" name="text">
+                    <input type="text" class="form-control" name="text" value="<?php if(isset($_POST['text'])) echo $_POST['text']; ?>">
                 </div>
 
                 <div class="form-group">
@@ -104,6 +104,7 @@ include("main.php");
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="js/script.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     </body>
 </html>
