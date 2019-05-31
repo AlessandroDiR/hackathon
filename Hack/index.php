@@ -12,12 +12,11 @@ include("main.php");
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Hackaton</title>
         <link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
         <link rel="stylesheet" href="css/style.css">
     </head>
 
     <body>
-        <header class="hidden-sm hidden-xs shadow-sm"></header>
+        <a href="/"><header class="hidden-sm hidden-xs shadow-sm"></header></a>
 
         <div class="position-relative">
 			<div class="bars" data-toggle="collapse" tooltip="true" title="Salvataggi precedenti" data-placement="top" data-target="#collapse">

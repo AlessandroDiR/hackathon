@@ -7,11 +7,11 @@ textarea.form-control { resize: none }
 
 header { height: 200px; background: url('white.png') no-repeat center, url('header.jpg') center no-repeat; border-bottom: 5px solid #bbb; background-size: contain, cover }
 
-.collapse{ background: var(--light); text-align:center; max-height:400px; overflow:auto; box-shadow:0 0 5px 2px rgba(0,0,0,0.2); left:70px }
+.collapse{ background: var(--light); max-height:400px; overflow:auto; box-shadow:0 0 5px 2px rgba(0,0,0,0.2); left:70px }
 
 footer{ color:#fff; padding-bottom:1rem }
 
-.bars{ cursor:pointer; padding:0.8rem 0; position:relative; width:2.7rem; float:left; margin:1.5rem 1rem; transition:0.2s cubic-bezier(0.31, 0.64, 0.58, 1.3); visibility:visible }
+.bars{ border-top:6px solid transparent; cursor:pointer; padding:0.8rem 0; position:relative; width:2.7rem; float:left; margin:1.5rem 1rem; transition:0.2s cubic-bezier(0.31, 0.64, 0.58, 1.3); visibility:visible }
 .bar{ height:4px; background:#555; width:100%; transition-delay:0.4s }
 .bar:before{ display:block; content:''; height:4px; background:inherit; position:absolute; animation:before_back 0.4s linear forwards; z-index:-1; transform-origin:left }
 .bar:after{ display:block; content:''; height:4px; background:inherit; position:absolute; animation:after_back 0.4s linear forwards; z-index:-1; transform-origin:left }
