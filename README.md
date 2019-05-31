@@ -5,8 +5,9 @@ Hackathon week project powered by:
   <li>Enore Lasi</li>
   <li>Leonardo Grandolfo</li>
   <li>Francesco Carenvali</li>
-</ul><br/>
-# What the program does?
+</ul>
+
+# What the program does
 <li>takes an html page passed by URL</li>
 <li>extract the 20 words that appeard most frequently in the html page</li>
 <li>create a table with this 20 words with occurences number and the percentage occurrences</li>
