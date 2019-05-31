@@ -15,4 +15,4 @@ Hackathon week project powered by:
 - lets the user reload previous researches
 
 ## Getting started
-[Try it!](http://localhost/hack/)
+[Try it here!](http://cercaparole.000webhostapp.com/)
