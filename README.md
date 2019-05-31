@@ -14,11 +14,11 @@ Cerca parole is an hackathon week project made by students groups of FITSTIC
 :point_down:  
 [Try it here!](http://cercaparole.000webhostapp.com/)
 
-## Credits :trophy:
+## Credits
 Hackathon week project powered by:  
   - Alessandro Di Roma
   - Enore Lasi
   - Leonardo Grandolfo
   - Francesco Carenvali
 
-FITSTIC 2018-2019
+FITSTIC 2018-2019 :trophy:
