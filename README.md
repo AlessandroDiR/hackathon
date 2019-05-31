@@ -11,7 +11,7 @@ Cerca parole is an hackathon week project made by students groups of FITSTIC
 :pushpin: lets the user reload previous researches  
 
 ## Getting started
-:point_down:  
+:point_down: :point_down: :point_down:  
 [Try it here!](http://cercaparole.000webhostapp.com/)
 
 ## Credits
