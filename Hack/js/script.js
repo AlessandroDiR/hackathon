@@ -22,4 +22,9 @@ $(()=>{
             }
         })
     });
+
+    $(".read-article").click(function(){
+        $("input[name='text']").val($(this).attr("data-url"));
+        $("form").submit();
+    });
 });

@@ -11,6 +11,7 @@ include("main.php");
     	<meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Hackaton</title>
+        <link rel="shortcut icon" href="css/favicon.ico">
         <link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/style.css">
     </head>

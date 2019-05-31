@@ -69,6 +69,9 @@ function findwords($str, $url){
     $returnstring .= '</li>';
     $returnstring .= '<li class="nav-item">';
     $returnstring .= '<a class="nav-link" data-toggle="tab" href="#page" role="tab">Nella pagina</a>';
+    $returnstring .= '</li>';
+    $returnstring .= '<li class="nav-item">';
+    $returnstring .= '<a class="nav-link" data-toggle="tab" href="#homepage" role="tab">Ultimi 10 articoli (Cesenatoday)</a>';
     $returnstring .= '</li></ul>';
     $returnstring .= '<div class="tab-content border p-3 rounded">';
 
@@ -118,8 +121,16 @@ function findwords($str, $url){
     $returnstring .= '</div>';
     
     // STAMPO IL CODICE DELLA PAGINA PRINCIPALE EVIDENZIANDO LE PAROLE TROVATE
-    $returnstring .= '<div class="tab-pane fade" id="page" role="tabpanel">';
+    $returnstring .= '<div class="tab-pane fade text-justify" id="page" role="tabpanel">';
     $returnstring .= $title.$body;
+    $returnstring .= '</div>';
+    
+    // TROVO GLI ULTIMI 10 ARTICOLI DI CESENATODAY
+    $returnstring .= '<div class="tab-pane fade" id="homepage" role="tabpanel">';
+    
+    foreach(findwordsMorePages("http://cesenatoday.it") as $k=>$v)
+        $returnstring .= '<a class="d-block read-article pointer" href="javascript:void(0)" data-url="'.$k.'">'.$v.'</a>';
+
     $returnstring .= '</div></div>';
 
     //  INSERISCO IL SALVATAGGIO
@@ -151,6 +162,35 @@ function searchByTag($tag, $page){
         $testo .= $dom->saveXML($books->item($i));
 
     return strip_tags($testo);
+}
+
+// FUNZIONE PER PRENDERE GLI ULTIMI 10 ARTICOLI DEL SITO
+function findwordsMorePages($url)
+{
+    $dom = new DOMDocument();
+
+    $html = file_get_contents($url);
+    $dom->loadHTML($html);
+
+    $multiText = array();
+
+    $anchors = $dom->getElementsByTagName('a');
+    $i = 0;
+
+    foreach ($anchors as $element) {
+
+        // PRENDO L'ATTRIBUTO HREF DEI VARI LINK
+        $href = $element->getAttribute('href');
+
+        // CREO UN ARRAY CON I VARI LINK, MA SOLO SE SONO DIVERSI L'UNO DALL'ALTRO
+        if (strpos($href, 'http')!==0 && strpos($href, '.html') > 0 && !isset($multiText[$url.$href])) {
+            $multiText[$url.$href] = searchByTag("title", $url.$href);
+            $i++;
+        }
+        
+        if($i > 9) break;
+    }
+    return $multiText;
 }
 
 function getPageContent($url){
