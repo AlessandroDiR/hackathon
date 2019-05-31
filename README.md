@@ -7,7 +7,7 @@ Hackathon week project powered by:
   <li>Francesco Carenvali</li>
 </ul>
 
-# What the program does
+# <h3>What the program does</h3>
 <li>takes an html page passed by URL</li>
 <li>extracts the 20 words that appeared most frequently in the html page</li>
 <li>creates a table with these 20 words with occurences number and the percentage occurrences</li>
