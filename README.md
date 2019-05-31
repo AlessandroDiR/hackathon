@@ -1,9 +1,5 @@
 # Cerca parole
-Hackathon week project powered by:  
-  - Alessandro Di Roma
-  - Enore Lasi
-  - Leonardo Grandolfo
-  - Francesco Carenvali
+Cerca parole is an hackathon week project made by students groups of FITSTIC
 
 ## What the program does
 :pushpin: takes an html page passed by URL  
@@ -17,3 +13,12 @@ Hackathon week project powered by:
 ## Getting started
 :point_down:  
 [Try it here!](http://cercaparole.000webhostapp.com/)
+
+## Credits
+Hackathon week project powered by:  
+  - Alessandro Di Roma
+  - Enore Lasi
+  - Leonardo Grandolfo
+  - Francesco Carenvali
+
+FITSTIC 2018-2019
