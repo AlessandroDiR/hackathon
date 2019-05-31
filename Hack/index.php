@@ -20,9 +20,11 @@ include("main.php");
         <header class="hidden-sm hidden-xs shadow-sm"></header>
 
         <div class="position-relative">
-            <i class="fas fa-bars fa-3x m-3 float-left" data-toggle="collapse" data-target="#collapse"></i>
+			<div class="bars" data-toggle="collapse" data-target="#collapse">
+				<div class="bar"></div>
+			</div>
 
-            <div class="collapse rounded ml-3 col-8 col-md-2 p-0 mt-3 position-absolute" id="collapse">
+            <div class="collapse rounded ml-3 col-8 col-md-2 p-0 mt-4 position-absolute" id="collapse">
                 <nav class="nav flex-column">
                     <?php echo getDataFromDB(); ?>
                 </nav>
@@ -67,14 +69,14 @@ include("main.php");
 
             <div class="row px-5">
 
-                <div class="col-md-6">
+                <div class="col-6">
                     <h5 class="text-uppercase">Cerca Parole Project</h5>
-                    <p>The Cerca parole project is an advanced that permits you to search the most used words inside a web article.</p>
-                    <p>This tool is very usefull if you want to be self-aware of your own repititions.</p>
+                    <p>The Cerca Parole project is an advanced program that allows you to search the most used words inside a web page.</p>
+                    <p>This tool is very useful if you want to be self-aware of your own repititions.</p>
                 </div>
 
-                <div class="col-md-6 text-right">
-                    <h5 class="text-uppercase">Special Thanks to:</h5>
+                <div class="col-6 text-right">
+                    <h5 class="text-uppercase">Special thanks to:</h5>
 
                     <ul class="list-unstyled">
                         <li>
@@ -94,8 +96,8 @@ include("main.php");
 
             </div>
 
-            <div class="footer-copyright text-center">
-                ©2019 Copyright: <a href="https://www.fitstic.it/"> Fitstic.it</a>
+            <div class="text-center pb-1">
+                ©2019 Copyright: <a href="https://www.fitstic.it/" class="text-white"> Fitstic.it</a>
             </div>
 
         </footer>
