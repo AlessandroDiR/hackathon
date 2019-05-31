@@ -12,7 +12,8 @@ Cerca parole is an hackathon week project made by students groups of FITSTIC
 
 ## Getting started
 :point_down:  
-[Try it here!](http://cercaparole.000webhostapp.com/)
+[Try it here!](http://cercaparole.000webhostapp.com/)  
+:point_up:
 
 ## Credits
 Hackathon week project powered by:  
