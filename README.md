@@ -9,7 +9,7 @@ Hackathon week project powered by:
 
 # What the program does
 <li>takes an html page passed by URL</li>
-<li>extract the 20 words that appeard most frequently in the html page</li>
-<li>create a table with this 20 words with occurences number and the percentage occurrences</li>
-<li>creates a word cloud with this 20 words</li>
-<li>rewrite the same text of the article with a bold style for the each word of the 20 find words</li>
+<li>extracts the 20 words that appeared most frequently in the html page</li>
+<li>creates a table with this 20 words with occurences number and the percentage occurrences</li>
+<li>creates a word cloud with these 20 words</li>
+<li>rewrites the same text of the article with a bold style for each word of the 20 found words</li>
