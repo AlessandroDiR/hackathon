@@ -1,11 +1,22 @@
 $(()=>{
-    $('#collapse').collapse({
+    $('.collapse').collapse({
         toggle: false
     });
 
-    $('.fa-bars, .fa-times').click(function(){
-        $(this).toggleClass('fa-times fa-bars')
-    });
+	var resize = true;
+			
+	$(".bars").click(function(){
+		$(this).toggleClass("active");
+		$(".menu").toggleClass("open");
+		
+		var screen = $(window).width(),
+		menu = resize ? 300 : 0;
+		
+		$(".main-body").css("width", screen-menu+"px");
+		console.log(screen, menu);
+		
+		resize = !resize ? true : false;
+	});
 
     $(".collapse .nav-link").click(function(){
 
