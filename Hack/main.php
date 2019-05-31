@@ -189,10 +189,11 @@ function getDataFromDB(){
 function getContent($id){
     $conn = connectToDatabase();
 
-    $content = $conn->query("SELECT testo, risultati FROM ricerca WHERE id = '".$id."' LIMIT 1")->fetch_assoc();
-    
-    $return = '<p>'.$content['testo'].'</p>';
-    $return .= '<p>'.htmlspecialchars_decode($content['risultati']).'</p>';
+    $content = $conn->query("SELECT titolo, testo, risultati FROM ricerca WHERE id = '".$id."' LIMIT 1")->fetch_assoc();
+	
+    $return = $content['titolo'];
+    $return .= '<p>'.$content['testo'].'</p>';
+    $return .= '<p>'.$content['risultati'].'</p>';
 
     return $return;
 }
