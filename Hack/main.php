@@ -10,7 +10,7 @@ function sanitize($str){
     $replace = array_map("trim", explode(" ", $content));
     
     // SOSTITUISCO TUTTI I SEGNI DI PUNTEGGIATURA E I CARATTERI SPECIALI CON UNO SPAZIO NELLA STRINGA DATA
-    $str = preg_replace("/[.,\/#!$%\“”’^&\*';\":{}=\-_`~()]/", ' ', $str);
+    $str = preg_replace("/[.,\/#!$%\“”’^&*';\":{}=\-_`~()]/", ' ', $str);
 
     // SEPARO TUTTE LE PAROLE DEL TESTO DATO CON UNO SPAZIO CREANDO UN ARRAY
     $words = explode(" ", strtolower($str));
@@ -36,7 +36,7 @@ function findwords($str, $url){
     $occurrences = array();
 
     // PRENDO LE PAROLE "VALIDE" DALL'INPUT DELL'UTENTE
-    $words = sanitize($str);
+    $words = sanitize(strip_tags($str));
 
     // TOTALE DELLE OCCORRENZE (100%)
     $tot = 0;
@@ -112,14 +112,17 @@ function findwords($str, $url){
 
     $cloud_words = implode(";", $cloud_words);
 
+    // INCLUDO TRAMITE IFRAME LA NUVOLETTA
     $returnstring .= '<div class="tab-pane fade" id="cloud" role="tabpanel">';
     $returnstring .= '<iframe width="100%" height="500" class="border-0 mt-5" src="getcloud.php?max='.MAX_RESULTS.'&words='.$cloud_words.'"></iframe>';
     $returnstring .= '</div>';
     
+    // STAMPO IL CODICE DELLA PAGINA PRINCIPALE EVIDENZIANDO LE PAROLE TROVATE
     $returnstring .= '<div class="tab-pane fade" id="page" role="tabpanel">';
     $returnstring .= $title.$body;
     $returnstring .= '</div></div>';
 
+    //  INSERISCO IL SALVATAGGIO
     insertData($url, $occurrences, $body, $title);
 
     return $returnstring;
@@ -145,12 +148,13 @@ function searchByTag($tag, $page){
 
     // CICLO TUTTI I TAG P PER PRENDERNE IL CONTENUTO
     for($i = 0; $i < $count; $i++)
-        $testo .= $books->item($i)->nodeValue;
+        $testo .= $dom->saveXML($books->item($i));
 
-    return $testo;
+    return strip_tags($testo);
 }
 
 function getPageContent($url){
+    // PRENDO IL CONTENUTO DELLA PAGINA TRAMITE I TAG <title></title> E <p></p>
     $content = searchByTag("title", $url)." ";
     $content .= searchByTag("p", $url);
 
@@ -158,6 +162,7 @@ function getPageContent($url){
 }
 
 function connectToDatabase(){
+    // CONNESSIONE AL DATABASE
     return mysqli_connect("localhost:3308","root","password","find");
 }
 
@@ -166,19 +171,23 @@ function insertData($url, $results, $text, $title){
 
     $res = "";
 
+    // TRASFORMO L'ARRAY DATO IN INPUT IN UNA STRINGA SEPARATA DA SPAZI
     foreach($results as $k=>$v)
         $res .= $k." (".$v." volte) ";
    
+    // INSERISCO NEL DATABASE IL SALVATAGGIO
     $conn->query("INSERT INTO ricerca (url, risultati, testo, titolo) VALUES ('".$url."','".$res."','".addslashes($text)."','".addslashes($title)."'); ") or die(mysqli_error($conn));
 }
 
 function getDataFromDB(){
     $conn = connectToDatabase();
 
+    // PRENDO I SALVATAGGI DAL DATABASE
     $history = $conn->query("SELECT data, id FROM ricerca ORDER BY data DESC");
 
     $div = "";
 
+    // PER OGNI SALVATAGGIO INSERISCO UN'ANCORA NEL BOX
     while($h = $history->fetch_assoc()){
         $div .= '<a href="#page-content" class="d-block p-2 border-bottom pointer nav-link small"><span id="'.$h['id'].'">'.$h['data'].'</span></a>';
     }
@@ -186,11 +195,14 @@ function getDataFromDB(){
     return $div;
 }
 
+// PER CHIAMATA AJAX
 function getContent($id){
     $conn = connectToDatabase();
 
+    // PRENDO IL SALVATAGGIO SELEZIONATO DAL DATABASE
     $content = $conn->query("SELECT titolo, testo, risultati FROM ricerca WHERE id = '".$id."' LIMIT 1")->fetch_assoc();
-	
+    
+    // RESTITUISCO IL TITOLO, IL CONTENUTO DELL'ARTICOLO (CON RISULTATI EVIDENZIATI) E LE PAROLE TROVATE
     $return = $content['titolo'];
     $return .= '<p>'.$content['testo'].'</p>';
     $return .= '<p>'.$content['risultati'].'</p>';
